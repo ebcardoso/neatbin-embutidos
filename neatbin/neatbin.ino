@@ -4,6 +4,12 @@
 //Carrega a biblioteca do sensor ultrassonico
 #include "Ultrasonic.h"
 
+//carrega a biblioteca da telinha
+#include <Wire.h>
+#include "LiquidCrystal_I2C.h"
+// Inicializa o display no endereco 0x27
+LiquidCrystal_I2C lcd(0x27,2,1,0,4,5,6,7,3, POSITIVE);
+
 //Define os pinos para o trigger e echo
 #define pino_trigger 4
 #define pino_echo 5
@@ -13,8 +19,13 @@ Ultrasonic ultrasonic(pino_trigger, pino_echo);
 
 void setup()
 {
-  Serial.begin(9600);
-  Serial.println("Lendo dados do sensor...");
+  lcd.begin (16,2);
+  lcd.setBacklight(HIGH);
+
+  lcd.setCursor(0,0);
+    lcd.print("Sensor Distancia");
+  lcd.setCursor(0,1);
+    lcd.print("Lendo dados do sensor...");
 }
 
 void loop()
@@ -25,9 +36,10 @@ void loop()
   cmMsec = ultrasonic.convert(microsec, Ultrasonic::CM);
   inMsec = ultrasonic.convert(microsec, Ultrasonic::IN);
   //Exibe informacoes no serial monitor
-  Serial.print("Distancia em cm: ");
-  Serial.print(cmMsec);
-  Serial.print(" - Distancia em polegadas: ");
-  Serial.println(inMsec);
+  lcd.setCursor(0,1);
+    lcd.print("Dist: ");
+    lcd.print(cmMsec);
+    lcd.print("cm      ");
+    //lcd.println(inMsec);
   delay(1000);
 }
