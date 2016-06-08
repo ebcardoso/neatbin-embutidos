@@ -6,14 +6,19 @@
 #define pino_echo 5
 //Inicializa o sensor nos pinos definidos acima
 Ultrasonic ultrasonic(pino_trigger, pino_echo);
+float cmMsec;//inMsec;
+long microsec;
 
 static byte mymac[] = { 0x74,0x69,0x69,0x2D,0x30,0x31 };
 byte Ethernet::buffer[700];
 static uint32_t timer;
-char website[] = "10.0.0.101";
+char website[] = "192.168.0.116";
 char temp_sensor[150];
 //int an0 = A0;
 //int sensor = 0;
+
+#define pino_led 7
+
 
 static void my_callback (byte status, word off, word len)
 {
@@ -37,28 +42,26 @@ void setup ()
   ether.printIp("Sevidor DNS: ", ether.dnsip);
   //if (!ether.dnsLookup(website))     //IP do servidor por DNS
     //Serial.println("Falha no DNS");
-  ether.parseIp(ether.hisip, "10.0.0.101"); //IP do servidor manual
+  ether.parseIp(ether.hisip, "192.168.0.116"); //IP do servidor manual
   ether.printIp("Servidor: ", ether.hisip);
   Serial.println(" ");
 }
 
 void loop ()
 {
-  float cmMsec, inMsec;
-  long microsec = ultrasonic.timing();
-  cmMsec = ultrasonic.convert(microsec, Ultrasonic::CM);
-  inMsec = ultrasonic.convert(microsec, Ultrasonic::IN);
+  //inMsec = ultrasonic.convert(microsec, Ultrasonic::IN);
   
   ether.packetLoop(ether.packetReceive());
   if (millis() > timer)
   {
-    timer = millis() + 10000;
-    
-    //Serial.println((int)cmMsec);
+    timer = millis() + 5000;
+ 
+    microsec = ultrasonic.timing();
+    cmMsec = ultrasonic.convert(microsec, Ultrasonic::CM);
     
     ether.persistTcpConnection(true);
-    //sensor = analogRead(an0);
+    
     sprintf(temp_sensor, "?cod=1&med=%i", (int)cmMsec); 
-    ether.browseUrl(PSTR("http://10.0.0.101/neatbin/insert.php?cod=1&med=50"), temp_sensor, website, my_callback); 
+    ether.browseUrl(PSTR("http://192.168.0.116/neatbin/insert.php?cod=1&med=50"), temp_sensor, website, my_callback);
   }
 }

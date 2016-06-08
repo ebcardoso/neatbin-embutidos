@@ -3,7 +3,11 @@
 	$sql = mysql_query("SELECT * FROM medicao ORDER BY id_medicao DESC") or die (mysql_error());
 ?>	
 <html>
-	<head> <title> TNR - NeatBin </title> </head>
+	<head>
+		<title> TNR - NeatBin </title>
+		<meta http-equiv="refresh" content="5">
+	</head>
+
 	<body>
 	<h1> NeatBin - Medições </h1>
 

@@ -15,3 +15,4 @@ create table medicao (
 );
 
 insert into lixeira (codigo) values ("lix001");
+
