@@ -4,7 +4,8 @@ use bd_lixeira;
 
 create table lixeira (
 	id_lixeira int primary key auto_increment,
-	codigo varchar(30) unique
+	codigo varchar(30) unique,
+	altura int not null
 );
 
 create table medicao (
@@ -14,5 +15,4 @@ create table medicao (
 	hora datetime not null
 );
 
-insert into lixeira (codigo) values ("lix001");
-
+insert into lixeira (codigo, altura) values ("lix001", 47);
